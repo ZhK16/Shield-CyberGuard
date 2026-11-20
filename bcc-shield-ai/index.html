@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BCC Shield AI — демо-стенд антифрода</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0B0F14;--tx:#E6EDF3;--mut:#8B98A5;--bd:rgba(255,255,255,.09);--gl:rgba(255,255,255,.045);--g:#00A859;--ok:#10B981;--wr:#F59E0B;--cr:#EF4444;--lv:var(--ok);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100vh;background:radial-gradient(900px 500px at 12% -10%,rgba(0,168,89,.16),transparent),var(--bg);color:var(--tx);font:14px/1.45 'Plus Jakarta Sans',Inter,system-ui,-apple-system,'Segoe UI',sans-serif}
+button{font-family:inherit}
+button:focus-visible,input:focus-visible{outline:2px solid #34D399;outline-offset:2px}
+.hd{display:flex;align-items:center;gap:14px;padding:18px 20px;max-width:1280px;margin:auto;flex-wrap:wrap}
+.lg{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#00A859,#10B981);display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,168,89,.35)}
+.hd h1{font-size:18px;margin:0;font-weight:800}.hd small{color:var(--mut)}
+.live{margin-left:auto;display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);animation:pl 1.8s infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(16,185,129,.7)}70%,100%{box-shadow:0 0 0 8px transparent}}
+.tabs{display:none;gap:6px;width:100%;background:var(--gl);border:1px solid var(--bd);border-radius:14px;padding:4px}
+.tabs button{flex:1;border:0;background:none;color:var(--mut);padding:9px;border-radius:10px;font-weight:700;cursor:pointer}
+.tabs button.on{background:var(--g);color:#fff}
+.wrap{display:grid;grid-template-columns:minmax(0,410px) minmax(0,1fr);gap:24px;padding:0 20px 28px;max-width:1280px;margin:auto;align-items:start}
+.card{background:var(--gl);border:1px solid var(--bd);border-radius:20px;padding:18px;backdrop-filter:blur(14px)}
+.card h3{margin:0 0 12px;font-size:13px;font-weight:700;color:var(--mut)}
+.soc{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+.gc{text-align:center;color:var(--lv);transition:color .4s}
+.gw{position:relative;max-width:300px;margin:0 auto}
+.gw svg{width:100%;display:block}
+#gv{transition:stroke-dasharray .5s cubic-bezier(.3,.8,.3,1)}
+.big{position:absolute;left:0;right:0;bottom:2px;font-size:58px;font-weight:800;line-height:1;color:var(--tx)}
+.lvl{font-size:18px;font-weight:800;margin-top:8px}
+.vd{color:var(--mut);font-size:13px;margin-top:2px}
+.lgd{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--mut)}
+.lgd i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+.fr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd);font-size:13px}
+.fr:last-child{border:0}
+.fr b{font-weight:800;font-variant-numeric:tabular-nums}
+.bar{grid-column:1/-1;height:4px;border-radius:9px;background:rgba(255,255,255,.07);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;transition:width .4s}
+.kp{display:grid;gap:10px}
+.kp div{background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:14px;padding:12px 14px}
+.kp b{display:block;font-size:24px;font-weight:800}.kp span{font-size:12px;color:var(--mut)}
+.full .kp{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.hs{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:center}
+.hs .kp{grid-template-columns:1fr 1fr}.hs .kp b{font-size:20px}
+.kp div.fz{animation:fz 1.2s}@keyframes fz{from{background:rgba(0,168,89,.4)}}
+.sn{display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:13px;padding:6px 0}
+.sn.top{font-weight:800}
+.sd{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);color:var(--mut);font-size:12.5px}
+.rep{margin-top:8px;padding:8px 10px;border-radius:10px;font-size:11.5px;font-weight:600;line-height:1.35}
+.rep.ok{background:#ECFDF5;color:#047857}.rep.cr{background:#FEF2F2;color:#B91C1C}
+.tp{display:grid;grid-template-columns:minmax(0,270px) 1fr;gap:16px;align-items:center}
+.rw{border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#1b222b}
+.rt{display:flex;gap:6px;align-items:center;padding:8px 10px;font-size:11px;color:var(--mut);background:rgba(255,255,255,.05)}
+.rt i{width:9px;height:9px;border-radius:50%;background:#EF4444}.rt i+i{background:#F59E0B}.rt i+i+i{background:#10B981;margin-right:6px}
+.rb{display:grid;gap:4px;justify-items:center;padding:18px 10px;text-align:center}.rb span{color:var(--mut);font-size:12px}.rb small{color:var(--wr);font-weight:700;margin-top:4px}
+.tl{display:grid;gap:8px}
+.tl div{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);font-size:13px;animation:fi2 .5s}
+.tl b{color:#34D399;white-space:nowrap}
+@keyframes fi2{from{opacity:0;transform:translateX(12px)}}
+@media(max-width:640px){.tp{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:640px){.hs{grid-template-columns:minmax(0,1fr)}}
+.cv{position:relative;height:230px}
+.fl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.fl button{border:1px solid var(--bd);background:none;color:var(--mut);padding:6px 12px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer}
+.fl button.on{background:var(--g);border-color:var(--g);color:#fff}
+.tw{max-height:300px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:560px}
+th{text-align:left;color:var(--mut);font-weight:600;padding:6px 8px;position:sticky;top:0;background:#12181F}
+td{padding:8px;border-top:1px solid var(--bd);white-space:nowrap}
+tr.own td{background:rgba(0,168,89,.12)}
+.pill{padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:700}
+.pill.ok{background:rgba(16,185,129,.16);color:#34D399}.pill.wr{background:rgba(245,158,11,.16);color:#FBBF24}.pill.cr{background:rgba(239,68,68,.16);color:#F87171}
+/* phone */
+.phone{width:100%;max-width:392px;margin:auto;height:clamp(660px,calc(100vh - 110px),790px);border-radius:46px;background:#0a0c10;padding:10px;box-shadow:0 30px 80px rgba(0,0,0,.6);border:2px solid #232a33}
+.scr{position:relative;height:100%;border-radius:36px;background:#F8FAFC;color:#0F172A;overflow:hidden;display:flex;flex-direction:column;font-size:13px}
+.sb{display:flex;justify-content:space-between;padding:10px 24px 4px;font-size:12px;font-weight:700;background:#00A859;color:#fff}
+.ph-h{background:linear-gradient(135deg,#00A859,#047857);color:#fff;padding:8px 18px 16px;display:flex;justify-content:space-between;align-items:center}
+.ph-h small{opacity:.85}.ph-h h2{margin:0;font-size:17px}
+.av{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;font-weight:700;font-size:12px}
+.app{flex:1;overflow:auto;padding:12px 14px}
+.pre{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px}
+.pre button{white-space:nowrap;border:1px solid #D7DEE7;background:#fff;border-radius:99px;padding:7px 12px;font-weight:600;font-size:11.5px;cursor:pointer;color:#0F172A}
+.pre button:hover{border-color:#00A859;color:#047857}
+.c{background:#fff;border:1px solid #E5EAF1;border-radius:16px;padding:12px;margin-bottom:10px}
+.lb{display:block;font-size:11px;color:#64748B;font-weight:600;margin:10px 0 5px}.lb:first-child{margin-top:0}
+.seg{display:flex;background:#EEF2F6;border-radius:11px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:none;padding:7px 4px;border-radius:9px;font-size:11px;font-weight:600;color:#475569;cursor:pointer;transition:.2s}
+.seg button.on{background:#fff;color:#047857;box-shadow:0 1px 4px rgba(0,0,0,.14)}
+.amt{display:flex;align-items:center;border:1.5px solid #D7DEE7;border-radius:12px;padding:0 12px}
+.amt input{flex:1;border:0;outline:0;font-size:24px;font-weight:800;padding:8px 0;min-width:0;background:none;color:#0F172A;font-family:inherit}
+.amt span{font-size:22px;font-weight:700;color:#00A859}
+.chips{display:flex;gap:5px;margin-top:6px}
+.chips button{flex:1;border:0;background:#EEF2F6;border-radius:8px;padding:6px 0;font-size:11px;font-weight:600;color:#475569;cursor:pointer}
+.rcp{display:flex;gap:10px;align-items:center;margin-top:8px;padding:8px;background:#F1F5F9;border-radius:12px}
+.rcp .av{background:#D1FAE5;color:#047857;flex:none}.rcp b{display:block}.rcp small{color:#64748B}
+.sig{border:1.5px dashed rgba(16,185,129,.5);background:#F0FDF7}
+.sig h4{margin:0 0 4px;font-size:12px;color:#047857}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;font-size:12px;font-weight:500}
+.sw{position:relative;width:40px;height:23px;flex:none}
+.sw input{opacity:0;position:absolute;inset:0;margin:0;cursor:pointer;z-index:1;width:100%;height:100%}
+.sw i{position:absolute;inset:0;background:#CBD5E1;border-radius:99px;transition:.2s}
+.sw i::after{content:"";position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw input:checked+i{background:#EF4444}.sw input:checked+i::after{transform:translateX(17px)}
+.cta{padding:10px 14px 16px;background:#F8FAFC;border-top:1px solid #E5EAF1}
+.pri{width:100%;border:0;border-radius:14px;padding:14px;font-size:14px;font-weight:700;color:#fff;background:linear-gradient(135deg,#00A859,#10B981);cursor:pointer;box-shadow:0 8px 20px rgba(0,168,89,.3)}
+.pri:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.pri.red{background:linear-gradient(135deg,#DC2626,#EF4444);box-shadow:0 8px 20px rgba(239,68,68,.3)}
+.ghost{width:100%;margin-top:8px;border:1.5px solid #CBD5E1;background:#fff;border-radius:14px;padding:12px;font-weight:600;color:#334155;cursor:pointer}
+.ov{display:none;position:absolute;inset:0;background:#F8FAFC;z-index:5;flex-direction:column;padding:44px 20px 20px;overflow:auto;animation:fi .3s;text-align:center}
+.ov.cr{background:linear-gradient(#FEE2E2,#fff 55%)}.ov.wr{background:linear-gradient(#FEF3C7,#fff 55%)}.ov.ok{background:linear-gradient(#D1FAE5,#fff 55%)}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}}
+.mid{margin:auto 0;display:flex;flex-direction:column;gap:10px}
+.ring{width:84px;height:84px;border-radius:50%;border:4px solid #D1FAE5;border-top-color:#00A859;animation:sp .8s linear infinite;margin:0 auto 6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.pb{height:5px;background:#E2E8F0;border-radius:9px;overflow:hidden}
+.pb i{display:block;height:100%;background:#00A859;animation:pg 1.5s linear forwards}
+@keyframes pg{from{width:0}to{width:100%}}
+.ic{width:72px;height:72px;border-radius:50%;margin:0 auto;display:grid;place-items:center;font-size:34px;font-weight:800;color:#fff;animation:pop .5s}
+@keyframes pop{from{transform:scale(.3)}}
+.ic.ok{background:#10B981}.ic.wr{background:#F59E0B}.ic.cr{background:#EF4444}
+.ov h3{margin:4px 0 0;font-size:20px}.ov p{margin:0;color:#475569}
+.sc{align-self:center;padding:4px 12px;border-radius:99px;font-weight:700;font-size:12px;color:#fff}
+.sc.ok{background:#10B981}.sc.wr{background:#F59E0B}.sc.cr{background:#EF4444}
+.cdn{font-size:13px;color:#B91C1C;font-weight:600}.cdn b{font-size:20px;font-variant-numeric:tabular-nums}
+.why{background:#fff;border:1px solid #FECACA;border-radius:14px;padding:12px;text-align:left}
+.why b{display:block;margin-bottom:4px}.why ul{margin:8px 0 0;padding-left:18px;color:#7F1D1D;font-size:12px}
+.tc{text-align:left;font-size:12px;color:#64748B;font-weight:600}.tc .seg{margin-top:5px}
+.note{background:#fff;border:1px solid #E5EAF1;border-radius:12px;padding:10px;font-size:12px;text-align:left}
+.note.cr{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B;font-weight:600}
+.chk{display:grid;gap:7px;text-align:left}
+.chk label{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid #FDE68A;border-radius:12px;padding:10px;font-size:12.5px;cursor:pointer}
+.chk input{accent-color:#00A859;width:18px;height:18px;margin:0;flex:none}
+@media(max-width:1023px){
+ .wrap{grid-template-columns:minmax(0,1fr)}.tabs{display:flex}
+ body[data-v=phone] .socw,body[data-v=soc] .phw{display:none}
+ .live{margin-left:0}
+}
+@media(max-width:640px){.soc{grid-template-columns:minmax(0,1fr)}.full{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body data-v="phone">
+<header class="hd">
+ <div class="lg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
+ <div><h1>BCC Shield AI</h1><small>Поведенческий антифрод Банка ЦентрКредит. Демо-стенд: клиент и антифрод-центр</small></div>
+ <div class="live"><span class="dot"></span>Real-Time SOC на связи</div>
+ <div class="tabs"><button class="on" data-view="phone">Клиент</button><button data-view="soc">Антифрод-центр</button></div>
+</header>
+<main class="wrap">
+ <section class="phw"><div class="phone"><div class="scr" id="phone"></div></div></section>
+ <section class="socw soc">
+  <div class="card gc" id="gc">
+   <h3 style="text-align:left">Dynamic Risk Score</h3>
+   <div class="gw">
+    <svg viewBox="0 0 220 124"><path d="M20 110A90 90 0 0 1 200 110" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="16" stroke-linecap="round"/><path id="gv" d="M20 110A90 90 0 0 1 200 110" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-dasharray="0 283"/></svg>
+    <div class="big" id="num">0</div>
+   </div>
+   <div class="lvl" id="lvl">Безопасно</div><div class="vd" id="vd"></div>
+   <div class="lgd"><span><i style="background:var(--ok)"></i>Безопасно до 39</span><span><i style="background:var(--wr)"></i>Подозрительно 40–75</span><span><i style="background:var(--cr)"></i>Критический фрод 76+</span></div>
+  </div>
+  <div class="card"><h3>AI Explainability: что повлияло на оценку</h3><div id="fac"></div></div>
+  <div class="card full"><h3>Тихий щит: ловушка для мошенника</h3><div id="trap"><p style="margin:0;color:var(--mut)">Ловушка ждёт атаку. Включите в приложении «Удалённый доступ» и проведите крупный перевод: атакующий увидит «успех», а деньги клиента будут заморожены, следы сохранены, счёт получателя помечен как дроп.</p></div></div>
+  <div class="card"><h3>Распознавание сценария атаки</h3><div id="scn"></div></div>
+  <div class="card"><h3>Распределение атак за смену</h3><div class="cv"><canvas id="cv"></canvas></div></div>
+  <div class="card full"><h3>Итоги смены</h3><div class="kp"><div><b id="k1">0 ₸</b><span>Сэкономлено клиентам банка</span></div><div><b id="k2">0</b><span>Операций остановлено (cool-down и блокировка)</span></div><div><b id="k3">0</b><span>Транзакций проверено</span></div></div></div>
+  <div class="card full" id="hs"><h3>Досье клиента: статистика за 12 месяцев</h3>
+   <div class="hs"><div class="cv"><canvas id="cv2"></canvas></div>
+   <div><p id="hr" style="margin:0 0 10px;color:var(--mut);font-size:12.5px"></p><div class="kp"><div><b id="h1">0</b><span>Переводов за год</span></div><div><b id="h2">0</b><span>Сумма переводов за год</span></div><div><b id="h3">0</b><span>Средний перевод</span></div><div><b id="h4">0</b><span>Максимальный перевод</span></div><div><b id="h5">0</b><span>Операций сегодня</span></div><div><b id="h6">0</b><span>Остановлено попыток за год</span></div></div></div></div></div>
+  <div class="card full"><h3>Живой лог транзакций</h3>
+   <div class="fl" id="fl"><button class="on" data-f="all">Все</button><button data-f="Заблокировано">Заблокировано</button><button data-f="Cool-down">Cool-down</button><button data-f="Одобрено">Одобрено</button></div>
+   <div class="tw"><table><thead><tr><th>Время</th><th>Клиент</th><th>Операция</th><th>Сумма</th><th>Risk</th><th>Статус</th></tr></thead><tbody id="lg"></tbody></table></div>
+  </div>
+ </section>
+</main>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const fmt=n=>Math.round(n).toLocaleString('ru-RU')+' ₸';
+const TY={transfer:'Перевод по номеру',deposit:'Снятие вклада',loan:'Онлайн-кредит'};
+const LV={ok:'Безопасно',wr:'Подозрительно',cr:'Критический фрод'};
+const VD={ok:'Одобрить операцию',wr:'Усиленная проверка клиента',cr:'Приостановить на 2 часа (cool-down)'};
+const S={type:'transfer',amount:15000,rec:'frequent',call:false,remote:false,typing:'normal',night:false};
+const PRE=[
+ {n:'Обычный перевод другу',p:{type:'transfer',amount:15000,rec:'frequent',call:false,remote:false,typing:'normal',night:false}},
+ {n:'Атака телефонных мошенников',p:{type:'transfer',amount:850000,rec:'new',call:true,remote:true,typing:'slow',night:false}},
+ {n:'Подозрительный ночной кредит',p:{type:'loan',amount:600000,rec:'frequent',call:false,remote:false,typing:'slow',night:true}}];
+const RC={new:['Данияр Бекмуратов','+7 775 903 12 47','Первый перевод этому получателю'],frequent:['Айгерим Сейткали','+7 707 214 58 36','Частый контакт, 38 переводов']};
+const SH='<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M12 9v4M12 16h.01"/></svg>';
+
+/* Взвешенная модель риска: сумма вкладов факторов, ограниченная диапазоном 0..100 */
+function calculateFraudRisk(p,h){
+ const f=[],add=(l,v)=>f.push({l,v}),a=p.amount;
+ add('Базовый риск сессии',6);
+ if(p.type==='deposit')add('Досрочное снятие вклада с потерей процентов',10);
+ if(p.type==='loan')add('Онлайн-кредит с мгновенной выдачей',8);
+ const av=a>=1e6?25:a>=5e5?20:a>=2e5?12:a>=5e4?5:0;
+ if(av)add('Сумма '+fmt(a)+' выше обычного профиля клиента',av);
+ const n=h?h.rc[p.rec]:(p.rec==='new'?0:38);
+ if(p.rec==='new'){const v=Math.max(0,12-4*n);if(v)add(n?`Малознакомый получатель: ${n} перевод(а) за год`:'Нового получателя нет в истории за 12 месяцев',v)}
+ else add(`Знакомый получатель: ${n} переводов за год`,-4);
+ if(p.call)add('Активный голосовой вызов с неизвестного номера',30);
+ if(p.remote)add('Признаки удалённого доступа (AnyDesk, TeamViewer)',35);
+ if(p.typing==='slow')add('Аномальный ритм ввода, похожий на диктовку',20);
+ if(p.night)add('Ночное время 02:00–05:00',10);
+ if(p.call&&(p.rec==='new'||a>=2e5))add('Комбинация: звонок и крупная сумма или новый получатель',10);
+ if(p.night&&p.type==='loan')add('Комбинация: кредит ночью',8);
+ if(h){const avg=h.sum/h.n,k=a/avg;
+  if(p.type==='transfer'&&k>=10)add(`Сумма в ${Math.round(k)} раз выше вашего среднего перевода (${fmt(avg)})`,k>=30?15:10);
+  if(p.type==='transfer'&&a>h.max)add('Рекорд: больше любого перевода клиента за 12 месяцев',8);
+  if(h.today>=3)add(`Всплеск активности: операций сегодня — ${h.today}`,10);
+  if(p.rec==='new')add('Репутация получателя 9 из 100: признаки дроп-счёта',12)}
+ const score=Math.max(0,Math.min(100,f.reduce((s,x)=>s+x.v,0)));
+ return{score,f,level:score>75?'cr':score>=40?'wr':'ok'};
+}
+function explain(p){
+ const b=p.type==='transfer'?`Вы переводите ${fmt(p.amount)}${p.rec==='new'?' новому получателю':''}`:p.type==='deposit'?`Вы досрочно снимаете вклад на ${fmt(p.amount)}`:`Вы оформляете онлайн-кредит на ${fmt(p.amount)}`;
+ const c=[p.call&&'во время активного звонка с неизвестного номера',p.remote&&'при включённом удалённом доступе (AnyDesk, TeamViewer)',p.typing==='slow'&&'при необычно медленном вводе, похожем на диктовку',p.night&&'в ночное время'].filter(Boolean);
+ const hs=p.type==='transfer'?` История за год: ${H.rc[p.rec]?H.rc[p.rec]+' перевод(ов) этому получателю':'этого получателя в истории нет'}, ваш средний перевод ${fmt(H.sum/H.n)}.`:'';
+ return b+(c.length?', '+c.join(', '):'')+'.'+hs+' Такое сочетание характерно для схем социальной инженерии.';
+}
+
+/* Телефон */
+$('#phone').innerHTML=`
+<div class="sb"><span>9:41</span><span>5G</span></div>
+<div class="ph-h"><div><small>bcc.kz</small><h2>Платежи и переводы</h2></div><div class="av">АС</div></div>
+<div class="app">
+ <div class="pre">${PRE.map((x,i)=>`<button data-pre="${i}">${x.n}</button>`).join('')}</div>
+ <div class="c">
+  <span class="lb">Тип операции</span>
+  <div class="seg" data-k="type"><button data-v="transfer">Перевод по номеру</button><button data-v="deposit">Снятие депозита</button><button data-v="loan">Онлайн-кредит</button></div>
+  <span class="lb">Сумма</span>
+  <div class="amt"><input id="amt" inputmode="numeric" autocomplete="off" aria-label="Сумма в тенге"><span>₸</span></div>
+  <div class="chips">${[15000,150000,850000,2000000].map(v=>`<button data-a="${v}">${v.toLocaleString('ru-RU')}</button>`).join('')}</div>
+  <span class="lb" id="rl">Получатель</span>
+  <div class="seg" data-k="rec"><button data-v="new">Новый контакт</button><button data-v="frequent">Частый контакт</button></div>
+  <div class="rcp"><div class="av" id="ra"></div><div><b id="rn"></b><small id="rp"></small></div></div>
+  <div class="rep" id="rep"></div>
+ </div>
+ <div class="c sig"><h4>Симулятор поведенческих сигналов</h4>
+  <div class="row"><span>Активный звонок с неизвестного номера</span><label class="sw"><input type="checkbox" data-t="call" aria-label="Активный звонок"><i></i></label></div>
+  <div class="row"><span>Удалённый доступ AnyDesk или TeamViewer</span><label class="sw"><input type="checkbox" data-t="remote" aria-label="Удалённый доступ"><i></i></label></div>
+  <span class="lb">Темп ввода текста</span>
+  <div class="seg" data-k="typing"><button data-v="normal">Обычный</button><button data-v="slow">Медленный, под диктовку</button></div>
+  <span class="lb">Время суток</span>
+  <div class="seg" data-k="night"><button data-v="0">День</button><button data-v="1">Ночь 02:00–05:00</button></div>
+ </div>
+</div>
+<div class="cta"><button class="pri" id="go">Перевести</button></div>
+<div class="ov" id="ov"></div>`;
+
+const inp=$('#amt');
+function sync(){
+ $$('.seg[data-k] button').forEach(b=>{const k=b.parentNode.dataset.k,cur=k==='night'?(S.night?'1':'0'):S[k];b.classList.toggle('on',b.dataset.v===cur)});
+ $$('[data-t]').forEach(i=>i.checked=S[i.dataset.t]);
+ if(document.activeElement!==inp)inp.value=S.amount?S.amount.toLocaleString('ru-RU'):'';
+ const r=RC[S.rec];$('#rn').textContent=r[0];$('#rp').textContent=r[1]+', '+(H.rc[S.rec]?H.rc[S.rec]+' переводов за год':'нет в истории за год');
+ const q=S.rec==='new'?{c:'cr',t:'Репутация получателя 9 из 100: возможный дроп-счёт. Счёт открыт 3 дня назад, 14 входящих от разных людей за сутки, 7 жалоб (демо-профиль).'}:{c:'ok',t:'Репутация получателя 96 из 100: давний знакомый получатель без жалоб.'};$('#rep').className='rep '+q.c;$('#rep').textContent=q.t;$('#ra').textContent=r[0].split(' ').map(w=>w[0]).join('');
+ $('#rl').textContent=S.type==='transfer'?'Получатель':S.type==='deposit'?'Куда зачислить деньги':'Куда зачислить кредит';
+ $('#go').textContent=S.type==='transfer'?'Перевести':S.type==='deposit'?'Снять вклад':'Подтвердить кредит';
+ const k=calculateFraudRisk(S,H);renderRisk(k);renderScn(S,k);
+ $('#hr').textContent=`Выбранный получатель ${RC[S.rec][0]}: ${H.rc[S.rec]} переводов за 12 месяцев. ИИ сверяет с этой историей каждую операцию.`;
+}
+let shown=0,tk=0;
+function tween(to){const id=++tk,from=shown,t0=performance.now();(function st(t){if(id!==tk)return;const k=Math.min(1,(t-t0)/500);shown=from+(to-from)*k;$('#num').textContent=Math.round(shown);if(k<1)requestAnimationFrame(st)})(t0)}
+function renderRisk(r){
+ $('#gv').setAttribute('stroke-dasharray',`${Math.max(.1,282.7*r.score/100)} 283`);
+ $('#gc').style.setProperty('--lv',`var(--${r.level})`);
+ $('#lvl').textContent=LV[r.level];$('#vd').textContent=VD[r.level];tween(r.score);
+ const c={ok:'var(--ok)',wr:'var(--wr)',cr:'var(--cr)'};
+ $('#fac').innerHTML=[...r.f].sort((a,b)=>b.v-a.v).map(x=>`<div class="fr"><span>${x.l}</span><b style="color:${x.v>0?(x.v>=25?'var(--cr)':'var(--wr)'):'var(--ok)'}">${x.v>0?'+':'−'}${Math.abs(x.v)} баллов</b><div class="bar"><i style="width:${Math.min(100,Math.abs(x.v)/35*100)}%;background:${x.v>0?(x.v>=25?c.cr:c.wr):c.ok}"></i></div></div>`).join('');
+}
+
+/* События формы */
+$('#phone').addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ const sg=b.closest('.seg[data-k]');
+ if(sg){const k=sg.dataset.k;S[k]=k==='night'?b.dataset.v==='1':b.dataset.v;sync()}
+ else if(b.dataset.pre){Object.assign(S,PRE[b.dataset.pre].p);sync()}
+ else if(b.dataset.a){S.amount=+b.dataset.a;sync()}
+});
+$('#phone').addEventListener('change',e=>{const t=e.target.dataset.t;if(t){S[t]=e.target.checked;sync()}});
+inp.addEventListener('input',()=>{S.amount=+inp.value.replace(/\D/g,'')||0;inp.value=S.amount?S.amount.toLocaleString('ru-RU'):'';sync()});
+$$('.tabs button').forEach(b=>b.onclick=()=>{document.body.dataset.v=b.dataset.view;$$('.tabs button').forEach(x=>x.classList.toggle('on',x===b))});
+
+/* Статистика, график, лог */
+const ST={total:1284,blocked:37,saved:18450000,cat:[13,8,10,6]};
+const H={m:[9,7,8,11,10,12,9,13,10,12,14,8],n:123,sum:3493200,max:180000,rc:{new:0,frequent:38},today:1,other:4,stop:3};
+const MN=['дек','янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя'];let ch2;
+const yr=p=>p.type==='transfer'?` Всего за год: ${H.n} переводов на ${fmt(H.sum)}.`:'';
+function initChart2(){if(!window.Chart)return;ch2=new Chart($('#cv2'),{type:'bar',data:{labels:MN,datasets:[{label:'Переводов',data:[...H.m],backgroundColor:MN.map((_,i)=>i===11?'#10B981':'rgba(0,168,89,.4)'),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8B98A5'},grid:{display:false}},y:{ticks:{color:'#8B98A5'},grid:{color:'rgba(255,255,255,.06)'}}}}})}
+function renderHist(fl){
+ [H.n,fmt(H.sum),fmt(H.sum/H.n),fmt(H.max),H.today,H.stop].forEach((x,i)=>$('#h'+(i+1)).textContent=x);
+ if(ch2){ch2.data.datasets[0].data=[...H.m];ch2.update()}
+ if(fl)$$('#hs .kp div').forEach(d=>{d.classList.remove('fz');void d.offsetWidth;d.classList.add('fz')});
+}
+function learn(p){if(p.type==='transfer'){H.n++;H.sum+=p.amount;H.max=Math.max(H.max,p.amount);H.m[11]++;H.rc[p.rec]++}else H.other++;H.today++;renderHist(1);sync()}
+const SCN=[
+ ['Фальшивая «служба безопасности банка»',p=>(p.call?40:0)+(p.remote?15:0)+(p.rec==='new'?20:0)+(p.typing==='slow'?15:0)+(p.type==='transfer'?10:0),'Звонящий пугает «взломом счёта» и требует перевести деньги на «безопасный счёт».'],
+ ['Кредит «под диктовку»',p=>(p.type==='loan'?50:0)+(p.typing==='slow'?20:0)+(p.night?15:0)+(p.call?10:0)+(p.remote?10:0),'Клиента убеждают взять кредит и отдать деньги якобы ради спасения сбережений.'],
+ ['Удалённое управление приложением',p=>(p.remote?60:0)+(p.rec==='new'?15:0)+(p.night?10:0)+(p.typing==='slow'?10:0)+(p.call?5:0),'Через AnyDesk или TeamViewer преступник видит экран и вводит операции сам.'],
+ ['Вклад «на сохранный счёт»',p=>(p.type==='deposit'?50:0)+(p.call?25:0)+(p.rec==='new'?15:0)+(p.typing==='slow'?10:0),'Просят досрочно снять вклад и перевести деньги на «защищённый» счёт.']];
+const scn=p=>SCN.map(s=>({n:s[0],d:s[2],v:Math.min(99,s[1](p))})).sort((a,b)=>b.v-a.v);
+let trapId=0;
+function trapScreen(p,e,real){
+ show(`<div class="mid"><div class="ic ok">✓</div><h3>Перевод принят в обработку</h3><p>${fmt(p.amount)}, ${RC[p.rec][0]}. Обычно это занимает несколько минут.</p><div class="note cr">Подсказка для жюри: так экран выглядит для мошенника в AnyDesk. На деле деньги заморожены, а настоящее предупреждение пришло клиенту на второе устройство.</div></div><button class="pri red" id="rl">Показать предупреждение на втором устройстве</button>`,'ok');
+ $('#rl').onclick=()=>real();runTrap(p);
+}
+function runTrap(p){
+ const id=++trapId,n=RC[p.rec][0];
+ const st=[['0:00',`Деньги заморожены: ${fmt(p.amount)} остаются на счёте клиента`],['0:01','Следы атакующего сохранены: сеанс AnyDesk 482 913 077 и номер звонящего +7 747 000 00 00 (условные данные)'],['0:02',`Счёт получателя ${n} помечен как дроп, входящие переводы приостановлены`],['0:03','Клиенту и Доверенному контакту ушло предупреждение на второе устройство'],['0:04','Отчёт сформирован для Киберполиции МВД РК (имитация отправки)']];
+ $('#trap').innerHTML=`<div class="tp"><div class="rw"><div class="rt"><i></i><i></i><i></i>AnyDesk, сеанс 482 913 077</div><div class="rb"><div class="ic ok" style="width:46px;height:46px;font-size:24px">✓</div><b>Перевод выполнен</b><span>${fmt(p.amount)} → ${n}</span><small>Так видит экран мошенник</small></div></div><div class="tl" id="tl"></div></div>`;
+ st.forEach((s,i)=>setTimeout(()=>{const t=$('#tl');if(t&&id===trapId)t.insertAdjacentHTML('beforeend',`<div><b>${s[0]}</b><span>${s[1]}</span></div>`)},i*900+300));
+}
+function renderScn(p,r){
+ const l=scn(p),t=l[0],hit=r.score>=40&&t.v>=45;
+ $('#scn').innerHTML=l.map((x,i)=>`<div class="sn${i===0&&hit?' top':''}"><span>${x.n}</span><b>${x.v}%</b><div class="bar"><i style="width:${x.v}%;background:${hit&&i===0?'var(--cr)':'#3B82F6'}"></i></div></div>`).join('')+`<div class="sd">${hit?`Вероятный сценарий: ${t.n}. ${t.d}`:'Признаков известной схемы атаки нет, поведение сессии похоже на обычное.'}</div>`;
+}
+const CL=['Звонок и социальная инженерия','Удалённый доступ','Новый получатель','Ночные операции и кредиты'];
+const catOf=p=>p.remote?1:p.call?0:(p.night||p.type==='loan')?3:2;
+const LOG=[];let flt='all',ch;
+function initChart(){if(!window.Chart)return;ch=new Chart($('#cv'),{type:'doughnut',data:{labels:CL,datasets:[{data:ST.cat,backgroundColor:['#EF4444','#F59E0B','#3B82F6','#8B5CF6'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{position:'bottom',labels:{color:'#8B98A5',boxWidth:10,font:{size:11}}}}}})}
+function renderStats(){$('#k1').textContent=fmt(ST.saved);$('#k2').textContent=ST.blocked;$('#k3').textContent=ST.total.toLocaleString('ru-RU');if(ch){ch.data.datasets[0].data=ST.cat;ch.update()}}
+const cls=s=>s==='Одобрено'?'ok':s==='Cool-down'?'wr':'cr';
+function renderLog(){
+ $('#lg').innerHTML=LOG.filter(e=>flt==='all'||e.status===flt).slice(0,30).map(e=>`<tr class="${e.own?'own':''}"><td>${e.t.toLocaleTimeString('ru-RU')}</td><td>${e.name}</td><td>${TY[e.p.type]}</td><td>${fmt(e.p.amount)}</td><td><b style="color:var(--${e.r.level})">${e.r.score}</b></td><td><span class="pill ${cls(e.status)}">${e.status}</span></td></tr>`).join('')||'<tr><td colspan="6" style="color:var(--mut)">Нет операций с таким статусом. Запустите операцию в приложении слева.</td></tr>';
+}
+function record(p,r,status,own,t){
+ const e={p,r,status,own,name:own?'Демо-клиент (вы)':rnd(['Айдос Нурланов','Мадина Сарсенова','Ерболат Жумабаев','Динара Касымова','Тимур Оспанов','Асель Байжанова','Нурлан Абенов','Гульмира Турсынова']),t:t||new Date()};
+ ST.total++;if(status!=='Одобрено'){ST.blocked++;ST.saved+=p.amount;ST.cat[catOf(p)]++;if(own){H.stop++;renderHist(1)}}
+ LOG.unshift(e);if(LOG.length>60)LOG.pop();renderLog();renderStats();return e;
+}
+function setStatus(e,s){e.status=s;renderLog()}
+$('#fl').onclick=e=>{const b=e.target.closest('button');if(!b)return;flt=b.dataset.f;$$('#fl button').forEach(x=>x.classList.toggle('on',x===b));renderLog()};
+const rnd=a=>a[Math.random()*a.length|0];
+function rndP(){const bad=Math.random()<.35;return{type:rnd(['transfer','transfer','transfer','deposit','loan']),amount:rnd([8e3,25e3,6e4,12e4,3e5,45e4,9e5,14e5,25e5]),rec:Math.random()<.6?'frequent':'new',call:bad&&Math.random()<.7,remote:bad&&Math.random()<.5,typing:bad&&Math.random()<.6?'slow':'normal',night:Math.random()<.12}}
+function feed(t){const p=rndP(),r=calculateFraudRisk(p);record(p,r,r.score>=90?'Заблокировано':r.score>75?'Cool-down':r.score>=40&&Math.random()<.4?'Заблокировано':'Одобрено',false,t)}
+
+/* Оверлеи телефона */
+const ov=$('#ov');let cd;
+function show(h,c){ov.className='ov '+(c||'');ov.innerHTML=h;ov.style.display='flex';ov.scrollTop=0}
+function hide(){clearInterval(cd);ov.style.display='none'}
+const sc=r=>`<span class="sc ${r.level}">Risk Score ${r.score} из 100</span>`;
+function okScreen(p,r,t,s){show(`<div class="mid"><div class="ic ok">✓</div><h3>${t}</h3><p>${s}</p>${sc(r)}</div><button class="pri" onclick="hide()">Готово</button>`,'ok')}
+function cancelScreen(){show(`<div class="mid"><div class="ic ok">✓</div><h3>Операция отменена</h3><p>Деньги остались на вашем счёте. Если вам звонили «из банка», положите трубку и позвоните по номеру на карте.</p></div><button class="pri" onclick="hide()">Готово</button>`,'ok')}
+$('#go').onclick=()=>{
+ const p={...S},r=calculateFraudRisk(p,H),st=['Анализ голосового канала…','Поиск удалённого доступа…','Поведенческая биометрия…','Профиль получателя…'];let i=0;
+ show(`<div class="mid"><div class="ring"></div><h3>BCC Shield AI проверяет сессию</h3><p id="st">${st[0]}</p><div class="pb"><i></i></div></div>`);
+ const iv=setInterval(()=>{const el=$('#st');if(el)el.textContent=st[++i%4]},380);
+ setTimeout(()=>{clearInterval(iv);result(p,r)},1500);
+};
+function result(p,r){
+ const title=p.type==='transfer'?'Перевод выполнен':p.type==='deposit'?'Вклад снят':'Кредит оформлен';
+ const sum=`${fmt(p.amount)}, ${RC[p.rec][0]}. Проверка пройдена за 1,5 секунды.`;
+ if(r.level==='ok'){record(p,r,'Одобрено',true);learn(p);okScreen(p,r,title,sum+yr(p));return}
+ if(r.level==='wr'){
+  show(`<div class="mid"><div class="ic wr">!</div><h3>Подозрительная активность</h3><p>${explain(p)}</p>${sc(r)}<p style="font-weight:600;color:#92400E">Ответьте честно, прежде чем продолжить:</p>
+  <div class="chk">${['Мне никто не диктует и не торопит по телефону','Я лично знаю получателя и проверил реквизиты','Я не устанавливал приложения по просьбе третьих лиц'].map(t=>`<label><input type="checkbox">${t}</label>`).join('')}</div></div>
+  <button class="pri" id="cf" disabled>Всё верно, продолжить</button><button class="ghost" id="cn">Отменить операцию</button>`,'wr');
+  const bx=$$('.chk input');bx.forEach(b=>b.onchange=()=>$('#cf').disabled=!bx.every(x=>x.checked));
+  $('#cf').onclick=()=>{record(p,r,'Одобрено',true);learn(p);okScreen(p,r,title,sum+yr(p)+' Операция помечена для наблюдения.')};
+  $('#cn').onclick=()=>{record(p,r,'Заблокировано',true);cancelScreen()};return;
+ }
+ const e=record(p,r,'Cool-down',true),top=[...r.f].filter(x=>x.v>0).sort((a,b)=>b.v-a.v).slice(0,3);
+ const real=()=>{
+ show(`<div class="mid"><div class="ic cr">${SH}</div><h3>Операция приостановлена</h3><div class="cdn">Период охлаждения 2 часа, осталось <b id="cd">02:00:00</b></div>
+  <div class="why"><b>Почему мы остановили операцию</b><b style="color:#B91C1C">Похоже на схему: ${scn(p)[0].n}</b>${explain(p)}<ul>${top.map(x=>`<li>+${x.v} баллов: ${x.l}</li>`).join('')}</ul></div>${sc(r)}
+  <div class="tc">Доверенный контакт<div class="seg" id="tcs"><button class="on" data-n="Мама, Гульнара|+7 701 555 12 41">Мама</button><button data-n="Брат, Ерлан|+7 777 318 40 92">Брат</button></div></div><div id="tst"></div></div>
+  <button class="pri red" id="trq">Запросить подтверждение у Доверенного контакта</button><button class="ghost" id="cn">Отменить перевод</button>`,'cr');
+ const end=Date.now()+72e5;clearInterval(cd);
+ cd=setInterval(()=>{const el=$('#cd');if(!el)return clearInterval(cd);const s=Math.max(0,(end-Date.now())/1e3|0);el.textContent=[s/3600|0,s/60%60|0,s%60].map(x=>String(x).padStart(2,'0')).join(':')},500);
+ $('#tcs').onclick=ev=>{const b=ev.target.closest('button');if(b)$$('#tcs button').forEach(x=>x.classList.toggle('on',x===b))};
+ $('#trq').onclick=function(){
+  this.disabled=true;const [nm,ph]=$('#tcs .on').dataset.n.split('|');
+  $('#tst').innerHTML='<div class="note">Отправляем Push и SMS…</div>';
+  setTimeout(()=>{const t=$('#tst');if(t)t.innerHTML=`<div class="note">Push и SMS отправлены: ${nm}, +7 ${ph.slice(3,6)} ••• ${ph.slice(-2)}. Ждём ответ…</div>`},1100);
+  setTimeout(()=>{const t=$('#tst');if(!t)return;t.innerHTML=`<div class="note cr">${nm}: «Не подтверждаю, перезвони мне». Операция заблокирована, деньги в безопасности.</div>`;setStatus(e,'Заблокировано');$('#cn').textContent='Закрыть'},4300);
+ };
+ $('#cn').onclick=()=>{if(e.status==='Cool-down')setStatus(e,'Заблокировано');cancelScreen()};
+ };
+ if(p.remote)trapScreen(p,e,real);else real();
+}
+
+initChart();initChart2();renderHist();
+for(let i=9;i>=0;i--)feed(new Date(Date.now()-i*47000-20000));
+sync();
+setInterval(()=>feed(),5200);
+</script>
+</body>
+</html>

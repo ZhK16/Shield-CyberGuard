@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCC CyberGuard & BCC Shield AI — Pitch Decks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0B0F14;
+      --surface: #121821;
+      --surface-card: #182230;
+      --border: #1E293B;
+      --border-accent: rgba(0, 168, 89, 0.4);
+      --bcc-green: #00A859;
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --red: #EF4444;
+      --blue: #38BDF8;
+      --purple: #A855F7;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(18, 24, 33, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .shield-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--bcc-green), var(--emerald));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: #042414;
+    }
+    .brand h1 { font-size: 18px; font-weight: 700; }
+    .brand span { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .deck-tabs {
+      display: flex;
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .deck-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .deck-tab:hover { color: var(--text); }
+    .deck-tab.active {
+      background: var(--bcc-green);
+      color: #042414;
+      font-weight: 700;
+      box-shadow: 0 0 15px rgba(0, 168, 89, 0.4);
+    }
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-nav {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-nav:hover { border-color: var(--bcc-green); background: #1f2d3f; }
+    .slide-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-muted);
+      min-width: 65px;
+      text-align: center;
+    }
+    .main-view {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+    .slide-container {
+      width: 1200px;
+      height: 675px; /* 16:9 Aspect Ratio */
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 44px 52px;
+    }
+    .slide-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--bcc-green);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .slide-title {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .slide-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 26px;
+      max-width: 900px;
+      line-height: 1.45;
+    }
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .slide-footer {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+    .slide-footer span { font-family: 'JetBrains Mono', monospace; }
+    
+    /* Grid & Card Styles */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .grid-2-3 { display: grid; grid-template-columns: 2fr 3fr; gap: 24px; }
+    .grid-3-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; }
+    
+    .card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .card.accent-green { border-color: rgba(0, 168, 89, 0.5); background: linear-gradient(180deg, rgba(0,168,89,0.06), var(--surface-card)); }
+    .card.accent-red { border-color: rgba(239, 68, 68, 0.4); background: linear-gradient(180deg, rgba(239,68,68,0.06), var(--surface-card)); }
+    .card.accent-amber { border-color: rgba(245, 158, 11, 0.4); background: linear-gradient(180deg, rgba(245,158,11,0.06), var(--surface-card)); }
+    .card.accent-blue { border-color: rgba(56, 189, 248, 0.4); background: linear-gradient(180deg, rgba(56,189,248,0.06), var(--surface-card)); }
+    .card.accent-purple { border-color: rgba(168, 85, 247, 0.4); background: linear-gradient(180deg, rgba(168,85,247,0.06), var(--surface-card)); }
+    
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .badge-green { background: rgba(0, 168, 89, 0.2); color: var(--emerald); }
+    .badge-red { background: rgba(239, 68, 68, 0.2); color: var(--red); }
+    .badge-amber { background: rgba(245, 158, 11, 0.2); color: var(--amber); }
+    .badge-blue { background: rgba(56, 189, 248, 0.2); color: var(--blue); }
+    .badge-purple { background: rgba(168, 85, 247, 0.2); color: var(--purple); }
+
+    .card h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .card p { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+    .card ul { list-style: none; margin-top: 10px; }
+    .card ul li {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      position: relative;
+      padding-left: 14px;
+      line-height: 1.4;
+    }
+    .card ul li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--bcc-green);
+      font-weight: bold;
+    }
+    .hero-stat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 38px;
+      font-weight: 800;
+      color: var(--bcc-green);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .formula-box {
+      background: #090D12;
+      border: 1px dashed var(--border-accent);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .code-preview {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: #080C10;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .code-preview .kw { color: var(--bcc-green); font-weight: 600; }
+    .code-preview .val { color: var(--blue); }
+    .code-preview .alert { color: var(--red); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="shield-icon">🛡</div>
+      <div>
+        <h1>Bank CenterCredit Security Suites</h1>
+        <span>PITCH DECKS · HACKATHON 2026</span>
+      </div>
+    </div>
+    
+    <div class="deck-tabs">
+      <button class="deck-tab active" onclick="switchDeck('cyberguard')">BCC CyberGuard (10 слайдов)</button>
+      <button class="deck-tab" onclick="switchDeck('shield_ai')">BCC Shield AI (10 слайдов)</button>
+    </div>
+
+    <div class="nav-controls">
+      <button class="btn-nav" onclick="prevSlide()">← Назад</button>
+      <div class="slide-counter" id="slideNum">01 / 10</div>
+      <button class="btn-nav" onclick="nextSlide()">Вперёд →</button>
+    </div>
+  </header>
+
+  <main class="main-view">
+    <div class="slide-container" id="slideFrame">
+      <!-- Dynamic slide content injected by JavaScript -->
+    </div>
+  </main>
+
+  <script>
+    const decks = {
+      cyberguard: [
+        {
+          tag: "BCC CyberGuard · Титульный",
+          title: "BCC CyberGuard",
+          subtitle: "Real-Time Threat & Payment Integrity Engine · Движок защиты платежей, реквизитов и API-сессий",
+          content: `
+            <div class="grid-2-3" style="align-items: center; margin-bottom: 24px;">
+              <div>
+                <div class="badge badge-green">Банк ЦентрКредит</div>
+                <div class="hero-stat">&lt; 20 мс</div>
+                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5;">
+                  Мгновенное вынесение вердикта прямо в процессе проведения платежа. Полная защита экранной целостности и предотвращение мошеннических транзитов.
+                </p>
+              </div>
+              <div class="grid-2">
+                <div class="card accent-green">
+                  <div class="badge badge-green">ТРИ ДЕЙСТВИЯ</div>
+                  <h3>ALLOW · STEP-UP · BLOCK</h3>
+                  <p>От нулевого трения для честных клиентов до мгновенной блокировки сессии.</p>
+                </div>
+                <div class="card accent-blue">
+                  <div class="badge badge-blue">4 МОДУЛЯ</div>
+                  <h3>Глубокий анализ</h3>
+                  <p>Payload SHA-256, Attestation устройства, Velocity дроп-сетей, TLS JA3 отпечатки.</p>
+                </div>
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="card">
+                <h3>Защита реквизитов</h3>
+                <p>Исключение атак подмены QR и Man-in-the-Browser на уровне сверки хэшей.</p>
+              </div>
+              <div class="card">
+                <h3>Детекция дропперов</h3>
+                <p>Выявление веерных серий мелких переводов и мгновенного вывода (Mule rings).</p>
+              </div>
+              <div class="card accent-green">
+                <h3>Статус проекта</h3>
+                <p>Рабочий интерактивный прототип со встроенным симулятором атак.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 02 · Проблема",
+          title: "Атаки на платёжный контур происходят до и во время операции",
+          subtitle: "Традиционные AML и антифрод-системы анализируют транзакцию уже постфактум, пропуская манипуляции на клиенте.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-red">
+                <div class="badge badge-red">УГРОЗА 1</div>
+                <h3>Подмена реквизитов & QR-инъекция</h3>
+                <p>Вредоносное ПО или троян подменяет IBAN получателя прямо в момент клика «Подтвердить». Клиент видит верные реквизиты, а в ядро банка отправляются данные дропа.</p>
+              </div>
+              <div class="card accent-red">
+                <div class="badge badge-red">УГРОЗА 2</div>
+                <h3>Фермы дропперов & Дробление сумм</h3>
+                <p>Массовые серии мелких переводов (Smurfing) через десятки счетов за считанные секунды для обхода статических лимитов финмониторинга.</p>
+              </div>
+              <div class="card accent-amber">
+                <div class="badge badge-amber">УГРОЗА 3</div>
+                <h3>Эмуляторы, Headless & Root/Frida</h3>
+                <p>Использование эмуляторов, перехват функций через Frida hook, сокрытие отладки и обход механизмов аппаратной проверки Play Integrity.</p>
+              </div>
+              <div class="card accent-blue">
+                <div class="badge badge-blue">УГРОЗА 4</div>
+                <h3>Смена TLS-отпечатка (JA3) и Прокси</h3>
+                <p>Ротация резидентских прокси, использование VPN и внезапная смена TLS-отпечатка браузера прямо внутри активной авторизованной банковской сессии.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 03 · Решение",
+          title: "BCC CyberGuard — единый real-time движок",
+          subtitle: "Комплексный скоринг сессии и мгновенное распределение транзакций по 3 коридорам безопасности.",
+          content: `
+            <div class="grid-3-2">
+              <div class="card accent-green">
+                <div class="badge badge-green">ЕДИНЫЙ ИНДЕКС ОПАСНОСТИ</div>
+                <div class="hero-stat">0 – 100</div>
+                <h3 style="margin-bottom: 12px;">Dynamic Threat Score</h3>
+                <p style="margin-bottom: 14px;">Движок объединяет 4 независимых оси анализа в единую математическую оценку с задержкой от 6 до 20 мс.</p>
+                <ul>
+                  <li>Прозрачность: точная декомпозиция баллов для аналитика SOC</li>
+                  <li>Нулевая задержка в клиентском приложении (&lt; 20 мс)</li>
+                  <li>Единый шлюз для QR, P2P, переводов по номеру и B2B API</li>
+                </ul>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="card accent-green" style="padding: 14px 18px;">
+                  <span class="badge badge-green">ALLOW (&lt; 30)</span>
+                  <h3 style="font-size: 15px;">Зелёный коридор</h3>
+                  <p style="font-size: 11.5px;">Мгновенное бесшовное проведение для 95%+ честного трафика без лишних подтверждений.</p>
+                </div>
+                <div class="card accent-amber" style="padding: 14px 18px;">
+                  <span class="badge badge-amber">STEP-UP (30–74)</span>
+                  <h3 style="font-size: 15px;">Адаптивная верификация</h3>
+                  <p style="font-size: 11.5px;">Запрос аппаратного FIDO2/WebAuthn ключа или биометрии для подтверждения намерения.</p>
+                </div>
+                <div class="card accent-red" style="padding: 14px 18px;">
+                  <span class="badge badge-red">AUTO-BLOCK (≥ 75)</span>
+                  <h3 style="font-size: 15px;">Заморозка и инцидент</h3>
+                  <p style="font-size: 11.5px;">Моментальная отмена списания, заморозка сессии и отправка отпечатка в SOC Банка.</p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 04 · Архитектура",
+          title: "Четыре оси анализа угроз",
+          subtitle: "Специализированные модули с индивидуальными весовыми коэффициентами покрытия рисков.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-red">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="badge badge-red">ВЕС: 0.95</span>
+                  <span style="font-family: 'JetBrains Mono'; font-size: 12px; color: var(--red); font-weight: 700;">PAYLOAD</span>
+                </div>
+                <h3>Payment Payload Integrity</h3>
+                <ul>
+                  <li>Криптографическая сверка SHA-256 экрана и ядра банка</li>
+                  <li>Исключение подмены реквизитов после нажатия «Оплатить»</li>
+                  <li>Немедленный BLOCK при расхождении хэшей</li>
+                </ul>
+              </div>
+              <div class="card accent-red">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="badge badge-red">ВЕС: 0.90</span>
+                  <span style="font-family: 'JetBrains Mono'; font-size: 12px; color: var(--red); font-weight: 700;">VELOCITY</span>
+                </div>
+                <h3>Drop-Network Velocity</h3>
+                <ul>
+                  <li>Мониторинг частоты операций в минуту (RPM)</li>
+                  <li>Детекция связанных счетов-получателей в серии</li>
+                  <li>Обнаружение дробления крупных сумм (Smurfing)</li>
+                </ul>
+              </div>
+              <div class="card accent-amber">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="badge badge-amber">ВЕС: 0.85</span>
+                  <span style="font-family: 'JetBrains Mono'; font-size: 12px; color: var(--amber); font-weight: 700;">DEVICE</span>
+                </div>
+                <h3>Device & Runtime Attestation</h3>
+                <ul>
+                  <li>Детекция эмуляторов, рута, Magisk и хуков Frida</li>
+                  <li>Проверка криптографической аттестации Play Integrity</li>
+                  <li>Контроль состояния и смены SIM-карты</li>
+                </ul>
+              </div>
+              <div class="card accent-blue">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="badge badge-blue">ВЕС: 0.80</span>
+                  <span style="font-family: 'JetBrains Mono'; font-size: 12px; color: var(--blue); font-weight: 700;">NETWORK</span>
+                </div>
+                <h3>Network & TLS Fingerprinting</h3>
+                <ul>
+                  <li>Сверка TLS Client Hello отпечатка (JA3/JA4)</li>
+                  <li>Обнаружение ротации прокси и VPN внутри активной сессии</li>
+                  <li>Анализ репутации IP, ASN дата-центров и TOR-нод</li>
+                </ul>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 05 · Алгоритм",
+          title: "Формула расчёта Threat Score и матрица решений",
+          subtitle: "Вероятностная модель объединения свидетельств (Probabilistic Union) гарантирует отсутствие слепых зон.",
+          content: `
+            <div class="formula-box">
+              Threat Score = 100 × ( 1 − ∏ᵢ (1 − весᵢ × рискᵢ) )
+            </div>
+            <div class="grid-3">
+              <div class="card accent-green">
+                <div class="badge badge-green">БАЛЛ &lt; 30</div>
+                <h3>ALLOW</h3>
+                <p><strong>Штатный режим:</strong> Нулевое трение для клиента, задержка проверки до 10 мс. Пропускает добросовестные платежи.</p>
+              </div>
+              <div class="card accent-amber">
+                <div class="badge badge-amber">БАЛЛ 30 – 74</div>
+                <h3>STEP-UP CHALLENGE</h3>
+                <p><strong>Адаптивная проверка:</strong> Запрос дополнительного подтверждения биометрией или FIDO2-токеном устройства.</p>
+              </div>
+              <div class="card accent-red">
+                <div class="badge badge-red">БАЛЛ ≥ 75</div>
+                <h3>AUTO-BLOCK & FREEZE</h3>
+                <p><strong>Критическая блокировка:</strong> Немедленная отмена транзакции, заморозка сессии, инцидент в журнал SOC.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 06 · Механика",
+          title: "Целостность Payload: Экран подтверждения vs Ядро банка",
+          subtitle: "Защита от Man-in-the-Browser атак, когда троян подменяет реквизиты в момент отправки пакета.",
+          content: `
+            <div class="grid-2">
+              <div class="card">
+                <div class="badge badge-blue">МЕХАНИЗМ ЗАЩИТЫ</div>
+                <h3>Двойное крипто-хэширование</h3>
+                <p style="margin-bottom: 10px;">Фронтенд формирует криптографический SHA-256 отпечаток от отображаемых на экране реквизитов (Сумма, IBAN, Валюта, Nonce, Time).</p>
+                <p>Бэкенд ядра рассчитывает аналогичный хэш от полученного транзакционного пакета. Любое несовпадение свидетельствует о вмешательстве.</p>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div class="code-preview" style="border-left: 3px solid var(--bcc-green);">
+                  <div class="kw">// СТАТУС: MATCH (ХЭШИ СОВПАЛИ)</div>
+                  <div>Screen SHA: <span class="val">e3b0c44298fc1c149afbf4c8...</span></div>
+                  <div>Core SHA:   <span class="val">e3b0c44298fc1c149afbf4c8...</span></div>
+                  <div style="color: var(--emerald); margin-top: 4px;">✔ Транзакция легитимна. Пропуск в процессинг.</div>
+                </div>
+                <div class="code-preview" style="border-left: 3px solid var(--red);">
+                  <div class="alert">// СТАТУС: MISMATCH (ПОДМЕНА ОБНАРУЖЕНА!)</div>
+                  <div>Screen SHA: <span class="val">7f83b1657ff1fc53b92dc181...</span></div>
+                  <div>Core SHA:   <span class="alert">4b227777d4dd1fc61c6f884f...</span></div>
+                  <div class="alert" style="margin-top: 4px;">✖ Реквизиты изменены! Мгновенный AUTO-BLOCK.</div>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 07 · Дроп-сети",
+          title: "Выявление дроп-сетей: Граф связей и скорость (Velocity)",
+          subtitle: "Обнаружение аккумуляции и транзита средств через корреляцию параметров серии платежей.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-amber">
+                <div class="badge badge-amber">ПАТТЕРНЫ ДРОП-АККУМУЛЯЦИИ</div>
+                <h3>Сетевые аномалии</h3>
+                <ul>
+                  <li><strong>Граф «Многие-к-Одному»:</strong> Несколько счетов жертв одновременно переводят средства на один дроп-аккумулятор.</li>
+                  <li><strong>Всплеск RPM:</strong> Скорость серии превышает 20–50 запросов в минуту с одной группы IP/ASN.</li>
+                  <li><strong>Дробление (Smurfing):</strong> Суммы разбиваются по 45 000 – 50 000 ₸ для обхода финмониторинга.</li>
+                  <li><strong>Реакция:</strong> Модуль мгновенно поднимает риск до 90+, блокируя серию.</li>
+                </ul>
+              </div>
+              <div class="card">
+                <div class="badge badge-blue">СИГНАЛЫ В ДЕМО-СТЕНДЕ</div>
+                <h3>Индикаторы инцидента</h3>
+                <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                      <span>Скорость потока (RPM):</span>
+                      <span style="color: var(--red); font-weight: 700;">48 RPM (Порог: 5)</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                      <span>Связанные дроп-счета:</span>
+                      <span style="color: var(--red); font-weight: 700;">14 получателей</span>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
+                      <span>Распределение сумм:</span>
+                      <span style="color: var(--amber); font-weight: 700;">Дробление 49 500 ₸</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 08 · Ценность",
+          title: "Ценность для Банка ЦентрКредит и аналитиков SOC",
+          subtitle: "Снижение прямых финансовых потерь без деградации конверсии честных транзакций.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-green">
+                <div class="badge badge-green">FINANCIAL IMPACT</div>
+                <h3>Предотвращение потерь</h3>
+                <p>Блокировка несанкционированных списаний и вывода средств ДО того, как деньги покинут контур банка.</p>
+              </div>
+              <div class="card accent-blue">
+                <div class="badge badge-blue">SOC EXPLAINABILITY</div>
+                <h3>Прозрачность для аналитика</h3>
+                <p>Полный контекст каждого инцидента: точный вклад каждого модуля, отпечаток TLS, хэши реквизитов и статус среды.</p>
+              </div>
+              <div class="card accent-green">
+                <div class="badge badge-green">CUSTOMER RETENTION</div>
+                <h3>Минимум трения (Zero Friction)</h3>
+                <p>95%+ клиентов проводят операции мгновенно (задержка &lt; 10 мс) без раздражающих дополнительных SMS и подтверждений.</p>
+              </div>
+              <div class="card accent-purple">
+                <div class="badge badge-purple">UNIFIED PLATFORM</div>
+                <h3>Единый контур безопасности</h3>
+                <p>Универсальный движок для защиты мобильных QR-платежей, P2P-переводов по картам и B2B Open API каналов.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 09 · Демонстрация",
+          title: "Сценарий живой демонстрации (60–90 секунд)",
+          subtitle: "Наглядная проверка движка на 4 сценариях в интерактивном стенде.",
+          content: `
+            <div class="grid-4">
+              <div class="card accent-green">
+                <span class="badge badge-green">00 – 15 СЕК</span>
+                <h3 style="font-size: 15px;">Штатный платёж</h3>
+                <p style="font-size: 11.5px; margin-bottom: 8px;">Нормальный QR-платеж, мобильный оператор Kcell.</p>
+                <div style="font-family: 'JetBrains Mono'; font-size: 11px; color: var(--emerald); font-weight: 700;">Вердикт: ALLOW</div>
+              </div>
+              <div class="card accent-red">
+                <span class="badge badge-red">15 – 35 СЕК</span>
+                <h3 style="font-size: 15px;">Подмена реквизитов</h3>
+                <p style="font-size: 11.5px; margin-bottom: 8px;">Расхождение SHA-256 экрана и ядра банка.</p>
+                <div style="font-family: 'JetBrains Mono'; font-size: 11px; color: var(--red); font-weight: 700;">Вердикт: AUTO-BLOCK</div>
+              </div>
+              <div class="card accent-red">
+                <span class="badge badge-red">35 – 60 СЕК</span>
+                <h3 style="font-size: 15px;">Эмулятор + Дропы</h3>
+                <p style="font-size: 11.5px; margin-bottom: 8px;">Эмулятор Android + серия переводов на 12 счетов.</p>
+                <div style="font-family: 'JetBrains Mono'; font-size: 11px; color: var(--red); font-weight: 700;">Вердикт: AUTO-BLOCK</div>
+              </div>
+              <div class="card accent-amber">
+                <span class="badge badge-amber">60 – 90 СЕК</span>
+                <h3 style="font-size: 15px;">Прокси + Смена JA3</h3>
+                <p style="font-size: 11.5px; margin-bottom: 8px;">Ротация TLS отпечатка внутри сессии.</p>
+                <div style="font-family: 'JetBrains Mono'; font-size: 11px; color: var(--amber); font-weight: 700;">Вердикт: STEP-UP</div>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "Слайд 10 · Пилот",
+          title: "BCC CyberGuard готов к пилотному внедрению",
+          subtitle: "Готовность к интеграции в инфраструктуру Банка ЦентрКредит и подключению к SOC.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-green">
+                <div class="badge badge-green">ИТОГИ ПРОЕКТА</div>
+                <h3>Ключевые преимущества</h3>
+                <ul>
+                  <li>Скорость принятия решения &lt; 20 мс прямо в потоке</li>
+                  <li>Устранение атак подмены через сверку SHA-256</li>
+                  <li>Комплексная защита от дроп-сетей и скомпрометированных сред</li>
+                  <li>Полная прозрачность каждого вердикта для аналитика</li>
+                </ul>
+              </div>
+              <div class="card accent-blue">
+                <div class="badge badge-blue">ПРЕДЛОЖЕНИЕ ПО ПИЛОТУ</div>
+                <h3>Следующие шаги</h3>
+                <ul>
+                  <li>Пилотное тестирование на контуре P2P или QR-платежей</li>
+                  <li>Shadow-режим (оценка эффективности без влияния на клиентов)</li>
+                  <li>Интеграция с SIEM / SOAR Банка ЦентрКредит</li>
+                </ul>
+                <div style="margin-top: 14px; font-weight: 700; color: var(--bcc-green); font-size: 14px;">
+                  Готовы ответить на ваши вопросы! Q&A
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ],
+      shield_ai: [
+        {
+          tag: "BCC Shield AI · Слайд 01",
+          title: "BCC Shield AI",
+          subtitle: "Поведенческий антифрод нового поколения · Защита клиента от социальной инженерии 2026",
+          content: `
+            <div class="grid-2-3" style="align-items: center; margin-bottom: 24px;">
+              <div>
+                <div class="badge badge-green">БАНК ЦЕНТРКРЕДИТ</div>
+                <div class="hero-stat">Shield AI</div>
+                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.5;">
+                  Инновационная защита клиентов от телефонного мошенничества, дипфейков, удалённого управления и дроп-сетей.
+                </p>
+              </div>
+              <div class="grid-2">
+                <div class="card accent-green">
+                  <div class="badge badge-green">КОНЦЕПЦИЯ</div>
+                  <h3>«Тихий щит»</h3>
+                  <p>Ловушка для мошенника: фейковый успех и сохранение денег клиента.</p>
+                </div>
+                <div class="card accent-purple">
+                  <div class="badge badge-purple">СИНЕРГИЯ</div>
+                  <h3>Telco-Bank Fusion</h3>
+                  <p>Связка с операторами связи и Антифрод-центром НБРК.</p>
+                </div>
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="card">
+                <h3>Real-Time SOC</h3>
+                <p>Объяснимый скоринг каждого фактора риска в консоли безопасности.</p>
+              </div>
+              <div class="card">
+                <h3>Когнитивный барьер</h3>
+                <p>15-секундная пауза отрезвления и чек-лист самопроверки клиента.</p>
+              </div>
+              <div class="card accent-green">
+                <h3>Статус стенда</h3>
+                <p>Рабочий прототип со смоделированными данными реальных атак.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 02",
+          title: "Социальная инженерия 2026 стала промышленной",
+          subtitle: "Мошенники объединили психологическое давление с передовым AI-инструментарием.",
+          content: `
+            <div class="grid-3">
+              <div class="card accent-amber">
+                <div class="badge badge-amber">УГРОЗА 1</div>
+                <h3>AI Voice & Deepfake</h3>
+                <p>Синтез голоса родственников или руководства в мессенджерах и агрессивное психологическое давление по телефону.</p>
+              </div>
+              <div class="card accent-red">
+                <div class="badge badge-red">УГРОЗА 2</div>
+                <h3>Remote Access & AI-Agents</h3>
+                <p>Удалённое управление через AnyDesk / RustDesk или скрытые AI-агенты и автокликеры прямо в сессии смартфона.</p>
+              </div>
+              <div class="card accent-red">
+                <div class="badge badge-red">УГРОЗА 3</div>
+                <h3>Дроп-сети & Mule Ring</h3>
+                <p>Молниеносный транзит украденных средств через цепочки дроп-счетов и банкоматный вывод за пределами банка.</p>
+              </div>
+            </div>
+            <div class="card accent-green" style="margin-top: 18px;">
+              <p style="font-size: 13.5px; color: var(--text);">
+                <strong>Главный парадокс 2026 года:</strong> Под давлением злоумышленников жертва <em>САМА нажимает «Подтвердить»</em>, поэтому классический антифрод бессилен.
+              </p>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 03",
+          title: "BCC Shield AI — защита, которая думает вместе с клиентом",
+          subtitle: "Остановка не отдельной транзакции, а всего сценария мошеннической атаки.",
+          content: `
+            <div class="grid-3-2">
+              <div class="card accent-green">
+                <div class="badge badge-green">МИССИЯ</div>
+                <div style="font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 12px; line-height: 1.3;">
+                  «Мы останавливаем не просто транзакцию, а сценарий атаки»
+                </div>
+                <ul>
+                  <li><strong>Dynamic Risk Score (0–100):</strong> Поведенческий скоринг на лету</li>
+                  <li><strong>AI Explainability:</strong> Понятное объяснение причин для клиента и SOC</li>
+                  <li><strong>Адаптивный барьер:</strong> Пауза, cool-down, звонок близким</li>
+                  <li><strong>«Тихий щит»:</strong> Ловушка для атакующего при удалённом доступе</li>
+                </ul>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="card accent-blue" style="padding: 14px 18px;">
+                  <span class="badge badge-blue">УРОВЕНЬ 1: КЛИЕНТ</span>
+                  <h3>Когнитивный барьер</h3>
+                  <p style="font-size: 11.5px;">Пауза 15 сек, чек-лист отрезвления и кнопка «Стоп-кредит».</p>
+                </div>
+                <div class="card accent-green" style="padding: 14px 18px;">
+                  <span class="badge badge-green">УРОВЕНЬ 2: SOC БАНКА</span>
+                  <h3>Real-Time Аналитика</h3>
+                  <p style="font-size: 11.5px;">Мгновенный разбор вклада каждого фактора (+38 AI Voice).</p>
+                </div>
+                <div class="card accent-purple" style="padding: 14px 18px;">
+                  <span class="badge badge-purple">УРОВЕНЬ 3: ЭКОСИСТЕМА</span>
+                  <h3>Национальный обмен</h3>
+                  <p style="font-size: 11.5px;">Передача данных в Антифрод-центр НБРК и операторам связи.</p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 04",
+          title: "Как выглядит защита для клиента: Когнитивный барьер",
+          subtitle: "Психологическое выведение жертвы из-под гипнотического влияния злоумышленника.",
+          content: `
+            <div class="grid-4">
+              <div class="card accent-blue">
+                <div class="badge badge-blue">ШАГ 1 · 1.5 СЕК</div>
+                <h3 style="font-size: 15px;">Старт операции</h3>
+                <p style="font-size: 11.5px;">Фоновый анализ сессии, параметров звонка и телеметрии устройства.</p>
+              </div>
+              <div class="card accent-amber">
+                <div class="badge badge-amber">ШАГ 2 · РИСК 40–75</div>
+                <h3 style="font-size: 15px;">Пауза 15 секунд</h3>
+                <p style="font-size: 11.5px;">Экран блокируется на 15 секунд с 3 чекбоксами самопроверки («Вам звонят из банка?»).</p>
+              </div>
+              <div class="card accent-red">
+                <div class="badge badge-red">ШАГ 3 · РИСК 76+</div>
+                <h3 style="font-size: 15px;">Cool-Down 2 часа</h3>
+                <p style="font-size: 11.5px;">Заморозка списания, подробный разбор причин и предложение мер безопасности.</p>
+              </div>
+              <div class="card accent-green">
+                <div class="badge badge-green">ШАГ 4 · БЛИЗКИЕ</div>
+                <h3 style="font-size: 15px;">Доверенный контакт</h3>
+                <p style="font-size: 11.5px;">Подтверждение операции через доверенного человека (маму/супруга).</p>
+              </div>
+            </div>
+            <div class="card accent-green" style="margin-top: 18px; padding: 14px 20px;">
+              <span class="badge badge-green">КНОПКА ЭКСТРЕННОЙ БЕЗОПАСНОСТИ В 1 КЛИК</span>
+              <p style="font-size: 12.5px; color: var(--text);">
+                Клиент может в 1 клик нажать <strong>«Стоп-кредит + Инцидент в Антифрод-центр НБРК»</strong>, заблокировав возможность оформления кредитов по всей стране.
+              </p>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 05",
+          title: "Dynamic Risk Score + Explainability",
+          subtitle: "Интеллектуальная агрегация контекстных факторов и объяснимость каждого балла для офицера SOC.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-green">
+                <div class="badge badge-green">ДИНАМИЧЕСКАЯ ШКАЛА</div>
+                <h3>Градация уровней риска</h3>
+                <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+                  <div>
+                    <span style="font-family: 'JetBrains Mono'; font-weight: 700; color: var(--emerald);">0 – 39 · Безопасно</span>
+                    <p style="font-size: 11.5px;">Штатная операция, полное совпадение с 12-месячным профилем клиента.</p>
+                  </div>
+                  <div>
+                    <span style="font-family: 'JetBrains Mono'; font-weight: 700; color: var(--amber);">40 – 75 · Подозрительно</span>
+                    <p style="font-size: 11.5px;">Когнитивная пауза 15 сек, чек-лист самопроверки, подтверждение близким.</p>
+                  </div>
+                  <div>
+                    <span style="font-family: 'JetBrains Mono'; font-weight: 700; color: var(--red);">76 – 100 · Критический фрод</span>
+                    <p style="font-size: 11.5px;">Блокировка, 2-часовой cool-down, ловушка «Тихий щит», инцидент в SOC.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card accent-blue">
+                <div class="badge badge-blue">РАСКЛАДКА БАЛЛОВ В КАРТОЧКЕ SOC</div>
+                <h3>Факторы риска (Explainability)</h3>
+                <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px; font-family: 'JetBrains Mono'; font-size: 11px;">
+                  <div style="color: var(--red);">+38 · AI Voice & Deepfake (вероятность 89%)</div>
+                  <div style="color: var(--red);">+34 · Biometrics 2.0 (наклон + паузы под диктовку)</div>
+                  <div style="color: var(--amber);">+32 · Telco-Bank Fusion (активный нетарифицируемый звонок)</div>
+                  <div style="color: var(--amber);">+28 · Mule Ring (получатель зарегистрирован 3 дня назад)</div>
+                  <div style="color: var(--emerald);">−15 · Доверенное устройство (> 180 дней активности)</div>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 06",
+          title: "Технологический стек защиты нового поколения",
+          subtitle: "Синергия анализа речи, поведенческой физики, графовых баз данных и сотовых сетей.",
+          content: `
+            <div class="grid-3">
+              <div class="card accent-green">
+                <div class="badge badge-green">TELCO</div>
+                <h3>Telco-Bank Fusion</h3>
+                <p>Сигналы о параллельном звонке, переадресации, подмене SIM и вызовах с поддельных номеров (1414 / полиция).</p>
+              </div>
+              <div class="card accent-red">
+                <div class="badge badge-red">AI VOICE</div>
+                <h3>AI Voice & Deepfake</h3>
+                <p>Детекция синтезированного аудио и клонированных голосов родственников с точностью до 89% прямо во время диалога.</p>
+              </div>
+              <div class="card accent-blue">
+                <div class="badge badge-blue">BIOMETRICS</div>
+                <h3>Biometrics 2.0</h3>
+                <p>Снятие гироскопа, угла наклона смартфона, давления пальца, интервалов между нажатиями (Touch Δt), детекция диктовки.</p>
+              </div>
+              <div class="card accent-amber">
+                <div class="badge badge-amber">GRAPH</div>
+                <h3>Граф Mule Ring</h3>
+                <p>Обнаружение топологии транзита: «жертвы → узел-аккумулятор → вывод» через быстрые графовые алгоритмы.</p>
+              </div>
+              <div class="card accent-purple">
+                <div class="badge badge-purple">BEHAVIOR</div>
+                <h3>Поведенческий профиль</h3>
+                <p>Сравнение текущей операции с привычным цифровым почерком за последние 12 месяцев.</p>
+              </div>
+              <div class="card accent-green">
+                <div class="badge badge-green">SECURITY</div>
+                <h3>Zero-Trust Device SDK</h3>
+                <p>Проверка целостности ОС, детект Magisk, Frida, скрытых сервисов удалённого доступа (AnyDesk / RustDesk).</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 07",
+          title: "«Тихий щит» — ловушка для мошенника",
+          subtitle: "Дезориентация атакующего при попытке захвата экрана или удалённого доступа.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-red">
+                <div class="badge badge-red">ЧТО ВИДИТ МОШЕННИК (ANYDESK)</div>
+                <h3>Иллюзия успешного перевода</h3>
+                <ul>
+                  <li>Отображается реалистичный фейковый экран «Перевод выполнен»</li>
+                  <li>Мошенник уверен в успехе и спокойно завершает звонок</li>
+                  <li>Предотвращаются агрессивные попытки повторного списания</li>
+                  <li>Фиксируются IP, параметры соединения и реквизиты дропа</li>
+                </ul>
+              </div>
+              <div class="card accent-green">
+                <div class="badge badge-green">ЧТО ПРОИСХОДИТ В РЕАЛЬНОСТИ (SOC & КЛИЕНТ)</div>
+                <h3>Полное сохранение средств</h3>
+                <ul>
+                  <li>Фактическая транзакция НЕ отправляется в платёжный шлюз</li>
+                  <li>Деньги клиента надёжно заморожены на счёте</li>
+                  <li>Клиент переключается в режим защиты и видит реальный статус</li>
+                  <li>Доверенному лицу отправляется экстренное уведомление</li>
+                </ul>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 08",
+          title: "Экосистема: От клиента до Антифрод-центра НБРК",
+          subtitle: "Единый контур безопасности объединяет пользователя, банк, сотовых операторов и регулятора.",
+          content: `
+            <div class="grid-2">
+              <div class="card accent-green">
+                <div class="badge badge-green">ДОВЕРЕННЫЙ КОНТАКТ</div>
+                <h3>Человеческий фактор доверия</h3>
+                <p>При подозрении на психологическое давление или дипфейк операция требует одобрения доверенного родственника.</p>
+              </div>
+              <div class="card accent-blue">
+                <div class="badge badge-blue">СТОП-КРЕДИТ</div>
+                <h3>Мгновенный запрет на займы</h3>
+                <p>Активация добровольного отказа от кредитов во всех банках Казахстана в один клик через интеграцию с ПКБ / ГКБ.</p>
+              </div>
+              <div class="card accent-amber">
+                <div class="badge badge-amber">MULE RING</div>
+                <h3>Подсветка дроп-цепочек</h3>
+                <p>Автоматическое выявление транзитных дропперских счетов и передача их реквизитов в национальный реестр.</p>
+              </div>
+              <div class="card accent-purple">
+                <div class="badge badge-purple">НБРК & TELCO</div>
+                <h3>Единый контур обмена</h3>
+                <p>Прямой обмен сигналами об инцидентах с Национальным Банком РК и операторами сотовой связи.</p>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 09",
+          title: "Эффективность решения (смоделированные данные стенда)",
+          subtitle: "Результаты симуляции защиты на демонстрационном стенде Банка ЦентрКредит.",
+          content: `
+            <div class="grid-3">
+              <div class="card accent-green">
+                <div class="hero-stat" style="font-size: 26px;">14 250 000 ₸</div>
+                <h3>Сэкономлено клиентам</h3>
+                <p>Предотвращённый финансовый ущерб за смоделированную смену.</p>
+              </div>
+              <div class="card accent-red">
+                <div class="hero-stat" style="font-size: 26px; color: var(--red);">38 атак</div>
+                <h3>Остановлено инцидентов</h3>
+                <p>Заморожено через cool-down, барьеры и блокировки.</p>
+              </div>
+              <div class="card accent-blue">
+                <div class="hero-stat" style="font-size: 26px; color: var(--blue);">1 240</div>
+                <h3>Проверено операций</h3>
+                <p>97.2% пропущены мгновенно без малейшего трения.</p>
+              </div>
+            </div>
+            <div class="card" style="margin-top: 18px;">
+              <span class="badge badge-green">РАСПРЕДЕЛЕНИЕ ТИПОВ АТАК ЗА СМЕНУ:</span>
+              <div style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; color: var(--text);">
+                <div>• <strong>42%</strong> — Telco + VoIP давление под видом службы безопасности</div>
+                <div>• <strong>26%</strong> — AI Voice & Deepfake звонки от имени родственников</div>
+                <div>• <strong>18%</strong> — Попытки удалённого доступа через AnyDesk</div>
+                <div>• <strong>14%</strong> — Оформление онлайн-кредита под давлением</div>
+              </div>
+            </div>
+          `
+        },
+        {
+          tag: "BCC Shield AI · Слайд 10",
+          title: "BCC Shield AI готов к пилотному внедрению",
+          subtitle: "Пошаговая дорожная карта запуска и интеграции в Банк ЦентрКредит.",
+          content: `
+            <div class="grid-4">
+              <div class="card accent-green">
+                <div style="font-family: 'JetBrains Mono'; font-size: 24px; font-weight: 800; color: var(--emerald); margin-bottom: 4px;">01</div>
+                <h3 style="font-size: 15px;">Ограниченный контур</h3>
+                <p style="font-size: 11.5px;">Пилот на сегменте повышенного риска (новые получатели, крупные суммы).</p>
+              </div>
+              <div class="card accent-blue">
+                <div style="font-family: 'JetBrains Mono'; font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 4px;">02</div>
+                <h3 style="font-size: 15px;">Telco & НБРК</h3>
+                <p style="font-size: 11.5px;">Подключение метаданных звонков 1414 и шлюза Антифрод-центра НБРК.</p>
+              </div>
+              <div class="card accent-amber">
+                <div style="font-family: 'JetBrains Mono'; font-size: 24px; font-weight: 800; color: var(--amber); margin-bottom: 4px;">03</div>
+                <h3 style="font-size: 15px;">Калибровка</h3>
+                <p style="font-size: 11.5px;">Настройка порогов и когнитивных пауз на исторических данных банка.</p>
+              </div>
+              <div class="card accent-purple">
+                <div style="font-family: 'JetBrains Mono'; font-size: 24px; font-weight: 800; color: var(--purple); margin-bottom: 4px;">04</div>
+                <h3 style="font-size: 15px;">Развёртывание</h3>
+                <p style="font-size: 11.5px;">Активация «Тихого щита» и сервиса «Стоп-кредит» в приложении BCC.</p>
+              </div>
+            </div>
+            <div class="card accent-green" style="margin-top: 18px; padding: 14px 20px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 13px; font-weight: 700; color: var(--text);">Следующий шаг: обсуждение пилотного контура и технической карты интеграции.</span>
+                <span class="badge badge-green" style="margin: 0;">Q&A · ГОТОВЫ К ВОПРОСАМ</span>
+              </div>
+            </div>
+          `
+        }
+      ]
+    };
+
+    let currentDeck = 'cyberguard';
+    let currentSlide = 0;
+
+    function renderSlide() {
+      const slide = decks[currentDeck][currentSlide];
+      const frame = document.getElementById('slideFrame');
+      document.getElementById('slideNum').textContent = `${String(currentSlide + 1).padStart(2, '0')} / 10`;
+
+      frame.innerHTML = `
+        <div class="slide-tag">${slide.tag}</div>
+        <div class="slide-title">${slide.title}</div>
+        <div class="slide-subtitle">${slide.subtitle}</div>
+        <div class="slide-body">
+          ${slide.content}
+        </div>
+        <div class="slide-footer">
+          <div>🛡 Банк ЦентрКредит · Питч-дек 2026</div>
+          <span>Интеграции и данные демо смоделированы</span>
+        </div>
+      `;
+    }
+
+    function switchDeck(deckName) {
+      currentDeck = deckName;
+      currentSlide = 0;
+      document.querySelectorAll('.deck-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.getAttribute('onclick').includes(deckName));
+      });
+      renderSlide();
+    }
+
+    function nextSlide() {
+      if (currentSlide < decks[currentDeck].length - 1) {
+        currentSlide++;
+        renderSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        renderSlide();
+      }
+    }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    // Initial render
+    renderSlide();
+  </script>
+</body>
+</html>
